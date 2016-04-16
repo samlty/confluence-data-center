@@ -3,7 +3,7 @@ FROM java:8
 # Setup useful environment variables
 ENV CONF_HOME     /var/atlassian/confluence
 ENV CONF_INSTALL  /opt/atlassian/confluence
-ENV CONF_VERSION  5.9.8
+ENV CONF_VERSION  5.9.4
 
 # Install Atlassian Confluence and helper tools and setup initial home
 # directory structure.
@@ -36,7 +36,12 @@ RUN set -x \
         --delete               "Server/Service/Engine/Host/@debug" \
         --delete               "Server/Service/Engine/Host/Context/@debug" \
                                "${CONF_INSTALL}/conf/server.xml" \
-    && touch -d "@0"           "${CONF_INSTALL}/conf/server.xml"
+    && touch -d "@0"           "${CONF_INSTALL}/conf/server.xml" 
+
+RUN rm ${CONF_INSTALL}/confluence/WEB-INF/lib/atlassian-extras-decoder-v2-3.2.jar \
+    && sed -i 's/-Xms1024m -Xmx1024m/-Xms1024m -Xmx4096m/' ${CONF_INSTALL}/confluence/bin/setenv.sh
+ADD atlassian-extras-decoder-v2-3.2.jar ${CONF_INSTALL}/confluence/WEB-INF/lib/
+    
 
 # Use the default unprivileged account. This could be considered bad practice
 # on systems where multiple processes end up being executed by 'daemon' but
