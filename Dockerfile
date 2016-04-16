@@ -38,8 +38,8 @@ RUN set -x \
                                "${CONF_INSTALL}/conf/server.xml" \
     && touch -d "@0"           "${CONF_INSTALL}/conf/server.xml" 
 
-RUN rm ${CONF_INSTALL}/confluence/WEB-INF/lib/atlassian-extras-decoder-v2-3.2.jar \
-    && sed -i 's/-Xms1024m -Xmx1024m/-Xms1024m -Xmx4096m/' ${CONF_INSTALL}/confluence/bin/setenv.sh
+RUN rm ${CONF_INSTALL}/confluence/WEB-INF/lib/atlassian-extras-decoder-v2-3.2.jar
+RUN sed -i 's/-Xms1024m -Xmx1024m/-Xms1024m -Xmx4096m/' ${CONF_INSTALL}/bin/setenv.sh
 ADD atlassian-extras-decoder-v2-3.2.jar ${CONF_INSTALL}/confluence/WEB-INF/lib/
     
 
